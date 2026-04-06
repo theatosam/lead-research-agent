@@ -2,7 +2,7 @@
 ## Upwork Project Catalog Setup
 
 **Title (type exactly — Upwork prepends "You will get"):**
-`an AI agent that finds and qualifies leads automatically`
+`an AI outreach system that qualifies your prospect list and writes personalised emails`
 
 **Category:** Development & IT > AI & Machine Learning > Generative AI
 
@@ -37,17 +37,18 @@ Complete lead research system. Multi-source search, full ICP qualification, pers
 
 ## Full Description (paste exactly into Upwork)
 
-Finding good leads takes hours every week. This agent does it for you automatically.
+You have a prospect list. The problem is figuring out who is worth your time — and writing a decent email to each one takes forever.
 
-You tell me who your ideal client is. I build an AI agent that searches for matching prospects, checks them against your criteria, and drafts personalised outreach for each one, ready for you to send.
+This AI outreach system solves both. You upload your prospect list (from Apollo, LinkedIn, or your own CRM export). The agent scores every contact against your ideal client profile, then writes a personalised outreach email for each qualified lead — ready for you to review and send.
 
 What you get:
-- A fully working lead research agent tailored to your target client profile
-- Automatic lead qualification so you only see prospects worth your time
-- Draft outreach messages generated for each qualified lead
-- Full documentation so you understand exactly how it works
 
-You stop spending hours finding leads manually. The agent handles it while you focus on closing.
+- A fully working AI outreach system tailored to your target client profile
+- Automatic qualification so you only spend time on prospects worth pursuing
+- Personalised outreach emails generated for each qualified lead — not templates
+- Full documentation so you can run it yourself
+
+You stop writing cold emails from scratch. The agent handles qualification and drafting while you focus on closing.
 
 ---
 

@@ -666,8 +666,8 @@
   ════════════════════════════════ -->
   <div id="view-configure">
     <div class="configure-card">
-      <div class="configure-eyebrow">AI Prospecting System</div>
-      <div class="configure-title">FIND MY LEADS</div>
+      <div class="configure-eyebrow">AI Outreach System</div>
+      <div class="configure-title">QUALIFY MY LIST</div>
       <div class="configure-sub">Upload your prospect list. The agent qualifies every contact against your criteria and writes a personalised outreach email for each one.</div>
 
       <div class="divider"></div>
@@ -696,7 +696,7 @@
       </div>
 
       <!-- Run button -->
-      <button class="btn-run" id="btn-run">FIND MY LEADS</button>
+      <button class="btn-run" id="btn-run">QUALIFY MY LIST</button>
 
       <!-- Progress -->
       <div id="progress-box">
@@ -926,7 +926,7 @@ function fetchSSE(url, formData) {
     .catch(err => {
       showError(err.message || 'Pipeline failed. Check that your API key is configured.');
       btnRun.disabled = false;
-      btnRun.textContent = 'FIND MY LEADS';
+      btnRun.textContent = 'QUALIFY MY LIST';
       topbarTag.textContent = 'Error';
     });
 }
@@ -942,7 +942,7 @@ function handleSSEEvent(evt) {
   } else if (evt.type === 'error') {
     showError(evt.message);
     btnRun.disabled = false;
-    btnRun.textContent = 'FIND MY LEADS';
+    btnRun.textContent = 'QUALIFY MY LIST';
     topbarTag.textContent = 'Error';
   }
 }
@@ -1001,7 +1001,7 @@ function showResults(leads, s) {
   topbarRight.textContent = new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
 
   btnRun.disabled = false;
-  btnRun.textContent = 'FIND MY LEADS';
+  btnRun.textContent = 'QUALIFY MY LIST';
 
   // Auto-select first qualified lead
   const firstQualified = sorted.findIndex(l => l.qualified && l.draft_subject && l.draft_subject !== 'DRAFT_FAILED');
