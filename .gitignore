@@ -1,0 +1,18 @@
+# Credentials — never commit
+.env
+credentials.json
+token.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Output files — regenerated on each run
+output/*.json
+
+# macOS
+.DS_Store

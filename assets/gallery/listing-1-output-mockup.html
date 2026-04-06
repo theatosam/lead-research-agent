@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Lead Research Agent — Sample Output</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1920px; height: 1080px; background: #0A0A0A; font-family: 'DM Mono', monospace; overflow: hidden; position: relative; }
+  .ember-bar { position: absolute; left: 0; top: 0; width: 6px; height: 100%; background: #C8391A; }
+  .watermark { position: absolute; top: 40px; right: 48px; opacity: 0.35; }
+
+  /* Top bar */
+  .topbar {
+    position: absolute;
+    top: 0; left: 6px; right: 0;
+    height: 56px;
+    background: #111111;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    gap: 32px;
+  }
+  .topbar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: #F5F2ED;
+    letter-spacing: 0.08em;
+  }
+  .topbar-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6B6660;
+  }
+  .topbar-date {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    color: #6B6660;
+  }
+
+  /* Stats row */
+  .stats-row {
+    position: absolute;
+    top: 72px; left: 46px; right: 48px;
+    display: flex;
+    gap: 16px;
+  }
+  .stat-card {
+    background: #111111;
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 18px 24px;
+    flex: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6B6660;
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: #F5F2ED;
+    line-height: 1;
+  }
+  .stat-value.accent { color: #C8391A; }
+  .stat-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    color: #6B6660;
+    margin-top: 4px;
+  }
+
+  /* Main layout */
+  .main {
+    position: absolute;
+    top: 176px; left: 46px; right: 48px; bottom: 48px;
+    display: flex;
+    gap: 16px;
+  }
+
+  /* Lead table */
+  .lead-table-wrap {
+    flex: 1.4;
+    background: #111111;
+    border: 1px solid rgba(255,255,255,0.07);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .table-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .table-title {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #F5F2ED;
+  }
+  .badge {
+    background: rgba(200,57,26,0.15);
+    border: 1px solid rgba(200,57,26,0.3);
+    color: #C8391A;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    letter-spacing: 0.1em;
+  }
+  .table-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 0.8fr 0.8fr;
+    overflow: hidden;
+  }
+  .col-head {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6B6660;
+    padding: 12px 24px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .table-row {
+    display: contents;
+  }
+  .table-row > div {
+    padding: 10px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 300;
+    color: #C4C0B8;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .table-row.active > div { background: rgba(255,255,255,0.02); }
+  .lead-name { color: #F5F2ED; font-weight: 400; }
+  .score-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .score-high { background: rgba(200,57,26,0.15); color: #C8391A; border: 1px solid rgba(200,57,26,0.3); }
+  .score-med { background: rgba(196,192,184,0.1); color: #C4C0B8; border: 1px solid rgba(196,192,184,0.2); }
+  .score-low { background: rgba(107,102,96,0.1); color: #6B6660; border: 1px solid rgba(107,102,96,0.2); }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+  }
+  .dot-ready { background: #C8391A; }
+  .dot-pending { background: #6B6660; }
+  .dot-none { background: transparent; border: 1px solid #3E3B38; }
+  .table-summary {
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    margin-top: auto;
+  }
+  .summary-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    color: #3E3B38;
+    letter-spacing: 0.08em;
+  }
+  .summary-item span { color: #6B6660; }
+
+  /* Draft panel */
+  .draft-panel {
+    flex: 1;
+    background: #111111;
+    border: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .draft-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .draft-title {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #F5F2ED;
+  }
+  .draft-meta {
+    padding: 20px 24px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .draft-lead-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #F5F2ED;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .draft-lead-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    color: #6B6660;
+  }
+  .draft-field {
+    padding: 10px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .draft-field-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6B6660;
+    width: 64px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .draft-field-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 300;
+    color: #C4C0B8;
+    line-height: 1.5;
+  }
+  .draft-body {
+    flex: 1;
+    padding: 20px 24px;
+    overflow: hidden;
+  }
+  .draft-body-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 300;
+    color: #C4C0B8;
+    line-height: 1.9;
+  }
+  .draft-body-text .highlight { color: #F5F2ED; }
+  .draft-actions {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    gap: 10px;
+  }
+  .btn-primary {
+    background: #C8391A;
+    color: #F5F2ED;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: #F5F2ED;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="ember-bar"></div>
+
+<div class="watermark">
+  <svg width="40" height="44" viewBox="0 0 100 110" fill="none">
+    <rect x="0" y="96" width="100" height="8" fill="#2E2B28"/>
+    <rect x="0" y="82" width="82" height="8" fill="#3E3B38"/>
+    <rect x="0" y="68" width="64" height="8" fill="#5A5752"/>
+    <rect x="0" y="54" width="48" height="8" fill="#7A7772"/>
+    <rect x="0" y="40" width="34" height="8" fill="#C4C0B8"/>
+    <rect x="0" y="26" width="22" height="8" fill="#C8391A"/>
+    <rect x="0" y="12" width="12" height="8" fill="#F5F2ED"/>
+    <rect x="0" y="12" width="2" height="92" fill="rgba(200,57,26,0.35)"/>
+  </svg>
+</div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-title">LEAD RESEARCH AGENT</div>
+  <div class="topbar-tag">Sample Output Report</div>
+  <div class="topbar-date">Processed — Apr 03, 2026 · 08:14 GMT</div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">Prospects Scored</div>
+    <div class="stat-value">84</div>
+    <div class="stat-sub">from your list</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Qualified</div>
+    <div class="stat-value accent">19</div>
+    <div class="stat-sub">matched ICP criteria</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Outreach Drafted</div>
+    <div class="stat-value">19</div>
+    <div class="stat-sub">personalised outreach</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Time Saved</div>
+    <div class="stat-value">4.2<span style="font-size:22px;color:#6B6660"> HRS</span></div>
+    <div class="stat-sub">vs. manual review</div>
+  </div>
+</div>
+
+<!-- Main content -->
+<div class="main">
+
+  <!-- Lead table -->
+  <div class="lead-table-wrap">
+    <div class="table-header">
+      <div class="table-title">Qualified Leads</div>
+      <div class="badge">19 READY</div>
+      <div style="margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;font-weight:300;color:#3E3B38;letter-spacing:0.08em;">Showing top 7</div>
+    </div>
+    <div class="table-grid">
+      <div class="col-head">Company / Contact</div>
+      <div class="col-head">Role</div>
+      <div class="col-head">ICP Score</div>
+      <div class="col-head">Industry</div>
+      <div class="col-head">Status</div>
+
+      <!-- Rows 1–3: ember red score pill, Draft ready -->
+      <div class="table-row active">
+        <div><span class="lead-name">Apex Consulting · Ryan Mitchell</span></div>
+        <div>Founder &amp; CEO</div>
+        <div><span class="score-pill score-high">94</span></div>
+        <div>B2B Services</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Clearpath Digital · Laura Bennett</span></div>
+        <div>Operations Director</div>
+        <div><span class="score-pill score-high">88</span></div>
+        <div>Digital Agency</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Ironside Logistics · Derek Walsh</span></div>
+        <div>Managing Director</div>
+        <div><span class="score-pill score-high">85</span></div>
+        <div>Logistics</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+
+      <!-- Rows 4–19: gray score pill, Draft ready -->
+      <div class="table-row">
+        <div><span class="lead-name">Synapse HR · Claire Henderson</span></div>
+        <div>CEO</div>
+        <div><span class="score-pill score-med">79</span></div>
+        <div>HR Tech</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">FieldOps Pro · Marcus Greene</span></div>
+        <div>Founder</div>
+        <div><span class="score-pill score-med">76</span></div>
+        <div>Field Services</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Axiom Advisory · Sarah Callahan</span></div>
+        <div>Managing Partner</div>
+        <div><span class="score-pill score-med">74</span></div>
+        <div>Consulting</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Pura Growth · Tom Aldridge</span></div>
+        <div>Director of Ops</div>
+        <div><span class="score-pill score-med">71</span></div>
+        <div>E-commerce</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Bridgepoint Co · James Harlow</span></div>
+        <div>Head of Operations</div>
+        <div><span class="score-pill score-med">68</span></div>
+        <div>B2B Services</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Vantage Studio · Nina Osei</span></div>
+        <div>Founder</div>
+        <div><span class="score-pill score-med">65</span></div>
+        <div>Agency</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Northgate Advisory · Paul Strom</span></div>
+        <div>Managing Director</div>
+        <div><span class="score-pill score-med">63</span></div>
+        <div>Consulting</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Crestline Ops · Diana Kwon</span></div>
+        <div>COO</div>
+        <div><span class="score-pill score-med">61</span></div>
+        <div>Logistics</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Redwood Partners · Alan Frost</span></div>
+        <div>CEO</div>
+        <div><span class="score-pill score-med">59</span></div>
+        <div>B2B Services</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Halcyon Media · Sophie Grant</span></div>
+        <div>Founder</div>
+        <div><span class="score-pill score-med">57</span></div>
+        <div>Agency</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Meridian Group · Chris Baxter</span></div>
+        <div>Operations Lead</div>
+        <div><span class="score-pill score-med">54</span></div>
+        <div>Consulting</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Stonepath Capital · Emma Reeves</span></div>
+        <div>Managing Director</div>
+        <div><span class="score-pill score-med">52</span></div>
+        <div>Finance</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Forge Digital · Ben Achebe</span></div>
+        <div>Founder &amp; CEO</div>
+        <div><span class="score-pill score-med">49</span></div>
+        <div>Digital Agency</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Kindred Strategy · Fiona Walsh</span></div>
+        <div>Director</div>
+        <div><span class="score-pill score-med">47</span></div>
+        <div>Consulting</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Oakfield Labs · Marcus Chen</span></div>
+        <div>Founder</div>
+        <div><span class="score-pill score-med">45</span></div>
+        <div>SaaS</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Beacon Ops · Rachel Addo</span></div>
+        <div>Head of Ops</div>
+        <div><span class="score-pill score-med">43</span></div>
+        <div>Field Services</div>
+        <div><span class="status-dot dot-ready"></span>Draft ready</div>
+      </div>
+
+      <!-- Rows 20–22: muted pill, Below threshold -->
+      <div class="table-row">
+        <div><span class="lead-name">Summit Advisory · David Nkrumah</span></div>
+        <div>CEO</div>
+        <div><span class="score-pill score-low">41</span></div>
+        <div>Consulting</div>
+        <div><span class="status-dot dot-none"></span>Below threshold</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Tidewater Ops · Claire Mensah</span></div>
+        <div>Operations Director</div>
+        <div><span class="score-pill score-low">39</span></div>
+        <div>Logistics</div>
+        <div><span class="status-dot dot-none"></span>Below threshold</div>
+      </div>
+      <div class="table-row">
+        <div><span class="lead-name">Greystone Partners · Tom Asante</span></div>
+        <div>Managing Partner</div>
+        <div><span class="score-pill score-low">37</span></div>
+        <div>B2B Services</div>
+        <div><span class="status-dot dot-none"></span>Below threshold</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Draft panel -->
+  <div class="draft-panel">
+    <div class="draft-header">
+      <div class="draft-title">Draft Outreach</div>
+      <div class="badge" style="background:rgba(200,57,26,0.1);border-color:rgba(200,57,26,0.2);color:#C8391A;font-size:9px;">PERSONALISED</div>
+    </div>
+    <div class="draft-meta">
+      <div class="draft-lead-name">RYAN MITCHELL · APEX CONSULTING</div>
+      <div class="draft-lead-sub">Founder & CEO · B2B Services · ICP Score 94 / 100</div>
+    </div>
+    <div class="draft-field">
+      <div class="draft-field-label">To</div>
+      <div class="draft-field-value">ryan@apexconsulting.com</div>
+    </div>
+    <div class="draft-field">
+      <div class="draft-field-label">Subject</div>
+      <div class="draft-field-value">Quick question about your client intake process</div>
+    </div>
+    <div class="draft-body">
+      <div class="draft-body-text">
+        Hi Ryan,<br><br>
+        <span class="highlight">Apex fits the profile closely</span> — founder-led, scaling advisory practice, at the stage where operations typically become a bottleneck.<br><br>
+        Most consulting firms at your stage hit the same wall: the intake and onboarding process becomes a bottleneck. Founders end up spending 30-40% of their time on admin that should run automatically.<br><br>
+        <span class="highlight">I build AI agent systems that handle that entire process</span> — lead qualification, onboarding sequences, document collection — without you managing any of it.<br><br>
+        Would it be useful to see a quick sketch of how this would work for Apex specifically?<br><br>
+        Ato
+      </div>
+    </div>
+    <div class="draft-actions">
+      <div class="btn-primary">APPROVE + SEND</div>
+      <div class="btn-secondary">EDIT DRAFT</div>
+      <div class="btn-secondary">SKIP</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

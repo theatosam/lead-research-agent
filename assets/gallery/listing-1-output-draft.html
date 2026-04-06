@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>Lead Research Agent — Draft Outreach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 1200px;
+    background: #0A0A0A;
+    font-family: 'DM Mono', monospace;
+    overflow: hidden;
+    position: relative;
+  }
+  .ember-bar { position: absolute; left: 0; top: 0; width: 8px; height: 100%; background: #C8391A; }
+
+  .topbar {
+    position: absolute;
+    top: 0; left: 8px; right: 0;
+    height: 60px;
+    background: #111111;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    gap: 24px;
+  }
+  .topbar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #F5F2ED;
+    letter-spacing: 0.08em;
+  }
+  .topbar-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6B6660;
+  }
+  .badge {
+    background: rgba(200,57,26,0.12);
+    border: 1px solid rgba(200,57,26,0.25);
+    color: #C8391A;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    letter-spacing: 0.1em;
+  }
+  .score-badge {
+    margin-left: auto;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: #C8391A;
+    letter-spacing: 0.08em;
+  }
+
+  .draft-wrap {
+    position: absolute;
+    top: 76px; left: 48px; right: 48px; bottom: 48px;
+    background: #111111;
+    border: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .lead-block {
+    padding: 32px 48px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: #0F0F0F;
+  }
+  .lead-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: #F5F2ED;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .lead-meta {
+    font-size: 13px;
+    font-weight: 300;
+    color: #6B6660;
+    letter-spacing: 0.04em;
+  }
+  .lead-meta span {
+    color: #C8391A;
+    font-weight: 500;
+  }
+
+  .field-row {
+    padding: 18px 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .field-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6B6660;
+    width: 80px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .field-value {
+    font-size: 15px;
+    font-weight: 300;
+    color: #C4C0B8;
+    line-height: 1.5;
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.05);
+    margin: 0 48px;
+  }
+
+  .body-block {
+    flex: 1;
+    padding: 36px 48px;
+    overflow: hidden;
+  }
+  .body-text {
+    font-size: 17px;
+    font-weight: 300;
+    color: #C4C0B8;
+    line-height: 2.0;
+  }
+  .body-text .hl { color: #F5F2ED; font-weight: 400; }
+  .body-text .red { color: #C8391A; font-weight: 400; }
+
+  .actions {
+    padding: 24px 48px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    gap: 12px;
+    background: #0F0F0F;
+  }
+  .btn-primary {
+    background: #C8391A;
+    color: #F5F2ED;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: #C4C0B8;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .note {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 300;
+    color: #3E3B38;
+    align-self: center;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<div class="ember-bar"></div>
+
+<div class="topbar">
+  <div class="topbar-title">DRAFT OUTREACH</div>
+  <div class="topbar-tag">AI Lead Research Agent</div>
+  <div class="badge">PERSONALISED</div>
+  <div class="score-badge">ICP SCORE 94 / 100</div>
+</div>
+
+<div class="draft-wrap">
+
+  <div class="lead-block">
+    <div class="lead-name">RYAN MITCHELL — APEX CONSULTING</div>
+    <div class="lead-meta">Founder &amp; CEO &nbsp;·&nbsp; B2B Services &nbsp;·&nbsp; <span>Qualified lead #1 of 19</span></div>
+  </div>
+
+  <div class="field-row">
+    <div class="field-label">To</div>
+    <div class="field-value">ryan@apexconsulting.com</div>
+  </div>
+  <div class="field-row">
+    <div class="field-label">Subject</div>
+    <div class="field-value">Quick question about your client intake process</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="body-block">
+    <div class="body-text">
+      Hi Ryan,<br><br>
+      <span class="hl">Apex fits the profile closely</span> — founder-led, scaling advisory practice, at the stage where operations typically become a bottleneck.<br><br>
+      Most consulting firms at your stage hit the same wall: the intake and onboarding process becomes a bottleneck. Founders end up spending <span class="red">30–40% of their time</span> on admin that should run automatically.<br><br>
+      I build AI agent systems that handle that entire process — lead qualification, onboarding sequences, document collection — <span class="hl">without you managing any of it.</span><br><br>
+      Would it be useful to see a quick sketch of how this would work for Apex specifically?<br><br>
+      Ato
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="btn-primary">APPROVE + SEND</div>
+    <div class="btn-secondary">EDIT DRAFT</div>
+    <div class="btn-secondary">SKIP</div>
+    <div class="note">1 of 19 drafts · Each written for the specific prospect</div>
+  </div>
+
+</div>
+
+</body>
+</html>

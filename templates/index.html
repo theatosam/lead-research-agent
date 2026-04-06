@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Research Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Tokens ── */
+  :root {
+    --bg:        #0A0A0A;
+    --surface:   #111111;
+    --border:    rgba(255,255,255,0.07);
+    --border-sub: rgba(255,255,255,0.04);
+    --accent:    #C8391A;
+    --accent-bg: rgba(200,57,26,0.12);
+    --accent-bd: rgba(200,57,26,0.30);
+    --text-1:    #F5F2ED;
+    --text-2:    #C4C0B8;
+    --text-3:    #6B6660;
+    --text-4:    #3E3B38;
+    --font-head: 'Bebas Neue', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+    --font-serif:'Fraunces', serif;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text-1);
+    font-family: var(--font-mono);
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--text-4); }
+
+  /* ── Shared components ── */
+  .ember-bar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 5px; height: 100%;
+    background: var(--accent);
+    z-index: 100;
+  }
+
+  .topbar {
+    position: fixed;
+    top: 0; left: 5px; right: 0;
+    height: 52px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 36px;
+    gap: 24px;
+    z-index: 99;
+  }
+  .topbar-title {
+    font-family: var(--font-head);
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: var(--text-1);
+  }
+  .topbar-tag {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .topbar-right {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-4);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Watermark SVG ── */
+  .watermark {
+    position: fixed;
+    top: 64px; right: 36px;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Page wrapper ── */
+  .page { padding-top: 52px; min-height: 100vh; }
+
+  /* ══════════════════════════════════════
+     CONFIGURE VIEW
+  ══════════════════════════════════════ */
+  #view-configure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 52px);
+    padding: 48px 24px;
+  }
+
+  .configure-card {
+    width: 100%;
+    max-width: 560px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px 44px 44px;
+  }
+
+  .configure-eyebrow {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .configure-title {
+    font-family: var(--font-head);
+    font-size: 36px;
+    color: var(--text-1);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .configure-sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--text-3);
+    margin-bottom: 36px;
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  /* Field label */
+  .field-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* Drop zone */
+  .drop-zone {
+    border: 1px dashed rgba(255,255,255,0.15);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+  }
+  .drop-zone input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+  .drop-icon {
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: var(--text-3);
+  }
+  .drop-label {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-2);
+    margin-bottom: 4px;
+  }
+  .drop-sub {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-3);
+  }
+  .drop-zone.has-file .drop-label { color: var(--accent); }
+  .drop-zone.has-file .drop-icon { color: var(--accent); }
+
+  .sample-link {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-3);
+  }
+  .sample-link a {
+    color: var(--text-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .sample-link a:hover { color: var(--text-1); }
+
+  /* Threshold slider */
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .slider-edge {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-4);
+    white-space: nowrap;
+  }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 2px;
+    background: rgba(255,255,255,0.12);
+    outline: none;
+    border-radius: 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .slider-desc {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-3);
+  }
+  .slider-desc strong { color: var(--text-1); font-weight: 400; }
+
+  /* Run button */
+  .btn-run {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: var(--text-1);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    margin-top: 28px;
+    transition: opacity 0.15s;
+  }
+  .btn-run:hover { opacity: 0.88; }
+  .btn-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Progress list */
+  #progress-box {
+    display: none;
+    margin-top: 24px;
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+  .progress-bar-track {
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-list { list-style: none; }
+  .progress-item {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-3);
+    padding: 4px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .progress-item.active { color: var(--text-2); }
+  .progress-item.done { color: var(--text-3); }
+  .progress-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-4);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .progress-item.active .progress-dot { background: var(--accent); }
+  .progress-item.done .progress-dot { background: var(--text-4); }
+
+  .error-box {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-bg);
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-2);
+    display: none;
+  }
+
+  /* ══════════════════════════════════════
+     RESULTS VIEW
+  ══════════════════════════════════════ */
+  #view-results {
+    display: none;
+    flex-direction: column;
+    min-height: calc(100vh - 52px);
+    padding: 20px 28px 28px;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+  }
+  .stat-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: var(--font-head);
+    font-size: 36px;
+    color: var(--text-1);
+    line-height: 1;
+  }
+  .stat-value.accent { color: var(--accent); }
+  .stat-suffix {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-3);
+    margin-left: 2px;
+  }
+  .stat-sub {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-3);
+    margin-top: 4px;
+  }
+
+  /* Main content */
+  .results-main {
+    display: flex;
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Lead table */
+  .lead-table-wrap {
+    flex: 1.4;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+  }
+  .panel-header {
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .panel-title {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-1);
+  }
+  .badge {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-bd);
+    color: var(--accent);
+  }
+  .panel-meta {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 300;
+    color: var(--text-4);
+    letter-spacing: 0.06em;
+  }
+
+  .table-scroll { overflow-y: auto; flex: 1; }
+
+  .lead-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .lead-table thead th {
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    padding: 10px 20px;
+    text-align: left;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    white-space: nowrap;
+  }
+  .lead-table tbody tr {
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .lead-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .lead-table tbody tr.selected { background: rgba(200,57,26,0.06); }
+  .lead-table tbody td {
+    padding: 9px 20px;
+    border-bottom: 1px solid var(--border-sub);
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+  .lead-table tbody td.lead-name-cell {
+    color: var(--text-1);
+    font-weight: 400;
+  }
+
+  .score-pill {
+    display: inline-block;
+    padding: 2px 9px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .pill-high { background: var(--accent-bg); border: 1px solid var(--accent-bd); color: var(--accent); }
+  .pill-med  { background: rgba(196,192,184,0.08); border: 1px solid rgba(196,192,184,0.18); color: var(--text-2); }
+  .pill-low  { background: rgba(107,102,96,0.08); border: 1px solid rgba(107,102,96,0.15); color: var(--text-3); }
+
+  .status-dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+  }
+  .dot-ready   { background: var(--accent); }
+  .dot-pending { background: var(--text-4); border: 1px solid var(--text-4); }
+  .dot-none    { background: transparent; border: 1px solid var(--text-4); }
+
+  /* Draft panel */
+  .draft-panel {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .draft-lead-block {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border-sub);
+    flex-shrink: 0;
+  }
+  .draft-lead-name {
+    font-family: var(--font-head);
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    color: var(--text-1);
+    margin-bottom: 3px;
+  }
+  .draft-lead-sub {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-3);
+  }
+
+  .draft-field {
+    padding: 9px 20px;
+    border-bottom: 1px solid var(--border-sub);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    flex-shrink: 0;
+  }
+  .draft-field-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    width: 52px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .draft-field-value {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-2);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .draft-body-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+  }
+  .draft-body-text {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-2);
+    line-height: 1.9;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .draft-actions {
+    padding: 13px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--text-1);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-1);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border: 1px solid rgba(255,255,255,0.14);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: var(--text-1); }
+
+  .draft-empty {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text-4);
+  }
+  .draft-empty-icon { font-size: 24px; }
+  .draft-empty-text { font-size: 11px; font-weight: 300; letter-spacing: 0.08em; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 12px 18px;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-2);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 200;
+    max-width: 320px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* Responsive adjustments */
+  @media (max-width: 960px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .results-main { flex-direction: column; }
+    .lead-table-wrap { max-height: 380px; }
+  }
+  @media (max-width: 600px) {
+    #view-configure { padding: 24px 16px; }
+    .configure-card { padding: 28px 24px 32px; }
+    #view-results { padding: 16px; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Left ember bar -->
+<div class="ember-bar"></div>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-title">LEAD RESEARCH AGENT</div>
+  <div class="topbar-tag" id="topbar-tag">Ready</div>
+  <div class="topbar-right" id="topbar-right"></div>
+</div>
+
+<!-- Watermark -->
+<div class="watermark">
+  <svg width="32" height="36" viewBox="0 0 100 110" fill="none">
+    <rect x="0" y="96" width="100" height="8" fill="#2E2B28"/>
+    <rect x="0" y="82" width="82"  height="8" fill="#3E3B38"/>
+    <rect x="0" y="68" width="64"  height="8" fill="#5A5752"/>
+    <rect x="0" y="54" width="48"  height="8" fill="#7A7772"/>
+    <rect x="0" y="40" width="34"  height="8" fill="#C4C0B8"/>
+    <rect x="0" y="26" width="22"  height="8" fill="#C8391A"/>
+    <rect x="0" y="12" width="12"  height="8" fill="#F5F2ED"/>
+    <rect x="0" y="12" width="2"   height="92" fill="rgba(200,57,26,0.35)"/>
+  </svg>
+</div>
+
+<!-- ── PAGE ── -->
+<div class="page">
+
+  <!-- ════════════════════════════════
+       CONFIGURE VIEW
+  ════════════════════════════════ -->
+  <div id="view-configure">
+    <div class="configure-card">
+      <div class="configure-eyebrow">AI Prospecting System</div>
+      <div class="configure-title">FIND MY LEADS</div>
+      <div class="configure-sub">Upload your prospect list. The agent qualifies every contact against your criteria and writes a personalised outreach email for each one.</div>
+
+      <div class="divider"></div>
+
+      <!-- Upload -->
+      <label class="field-label">Your lead list</label>
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="csv-input" accept=".csv">
+        <div class="drop-icon">↑</div>
+        <div class="drop-label" id="drop-label">Drop your CSV here or click to browse</div>
+        <div class="drop-sub">Required columns: name, company, role, industry, email, company_size, notes</div>
+      </div>
+      <div class="sample-link">No list yet? <a href="/sample" download>Download the sample CSV</a> to see the format.</div>
+
+      <div class="divider"></div>
+
+      <!-- Threshold -->
+      <label class="field-label">How selective?</label>
+      <div class="slider-row">
+        <span class="slider-edge">Broad</span>
+        <input type="range" id="threshold" min="30" max="80" value="45" step="5">
+        <span class="slider-edge">Strict</span>
+      </div>
+      <div class="slider-desc" id="slider-desc">
+        Qualifying leads scoring <strong id="threshold-val">45</strong>+ out of 100
+      </div>
+
+      <!-- Run button -->
+      <button class="btn-run" id="btn-run">FIND MY LEADS</button>
+
+      <!-- Progress -->
+      <div id="progress-box">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <ul class="progress-list" id="progress-list"></ul>
+      </div>
+
+      <!-- Error -->
+      <div class="error-box" id="error-box"></div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       RESULTS VIEW
+  ════════════════════════════════ -->
+  <div id="view-results">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Prospects Scored</div>
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-sub">from your list</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Qualified</div>
+        <div class="stat-value accent" id="stat-qualified">—</div>
+        <div class="stat-sub">matched your criteria</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Drafts Ready</div>
+        <div class="stat-value" id="stat-drafted">—</div>
+        <div class="stat-sub">personalised outreach</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Time Saved</div>
+        <div class="stat-value" id="stat-time">—<span class="stat-suffix">hrs</span></div>
+        <div class="stat-sub">vs. manual research</div>
+      </div>
+    </div>
+
+    <!-- Main: table + draft panel -->
+    <div class="results-main">
+
+      <!-- Lead table -->
+      <div class="lead-table-wrap">
+        <div class="panel-header">
+          <div class="panel-title">Qualified Leads</div>
+          <div class="badge" id="table-badge">— READY</div>
+          <div class="panel-meta" id="table-meta"></div>
+        </div>
+        <div class="table-scroll">
+          <table class="lead-table">
+            <thead>
+              <tr>
+                <th>Company / Contact</th>
+                <th>Role</th>
+                <th>ICP Score</th>
+                <th>Industry</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="lead-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Draft panel -->
+      <div class="draft-panel" id="draft-panel">
+        <div class="panel-header">
+          <div class="panel-title">Draft Outreach</div>
+          <div class="badge" style="background:rgba(200,57,26,0.08);border-color:rgba(200,57,26,0.18);font-size:8px;">PERSONALISED</div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="draft-empty" id="draft-empty">
+          <div class="draft-empty-icon">←</div>
+          <div class="draft-empty-text">Select a lead to view draft</div>
+        </div>
+
+        <!-- Draft content (hidden until a row is selected) -->
+        <div id="draft-content" style="display:none;display:flex;flex-direction:column;flex:1;overflow:hidden;">
+          <div class="draft-lead-block">
+            <div class="draft-lead-name" id="d-name"></div>
+            <div class="draft-lead-sub" id="d-sub"></div>
+          </div>
+          <div class="draft-field">
+            <div class="draft-field-label">To</div>
+            <div class="draft-field-value" id="d-to"></div>
+          </div>
+          <div class="draft-field">
+            <div class="draft-field-label">Subject</div>
+            <div class="draft-field-value" id="d-subject"></div>
+          </div>
+          <div class="draft-body-wrap">
+            <div class="draft-body-text" id="d-body"></div>
+          </div>
+          <div class="draft-actions">
+            <button class="btn-primary" id="btn-copy">COPY EMAIL</button>
+            <button class="btn-secondary" id="btn-export">EXPORT TO SHEETS</button>
+            <button class="btn-secondary" id="btn-again">RUN AGAIN</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /view-results -->
+
+</div><!-- /page -->
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+// ── State ──────────────────────────────
+let allLeads = [];
+let selectedIdx = null;
+let stats = {};
+
+// ── Elements ───────────────────────────
+const viewConfigure  = document.getElementById('view-configure');
+const viewResults    = document.getElementById('view-results');
+const csvInput       = document.getElementById('csv-input');
+const dropZone       = document.getElementById('drop-zone');
+const dropLabel      = document.getElementById('drop-label');
+const btnRun         = document.getElementById('btn-run');
+const progressBox    = document.getElementById('progress-box');
+const progressFill   = document.getElementById('progress-fill');
+const progressList   = document.getElementById('progress-list');
+const errorBox       = document.getElementById('error-box');
+const thresholdInput = document.getElementById('threshold');
+const thresholdVal   = document.getElementById('threshold-val');
+const sliderDesc     = document.getElementById('slider-desc');
+const topbarTag      = document.getElementById('topbar-tag');
+const topbarRight    = document.getElementById('topbar-right');
+const toast          = document.getElementById('toast');
+
+// ── Slider ─────────────────────────────
+thresholdInput.addEventListener('input', () => {
+  thresholdVal.textContent = thresholdInput.value;
+});
+
+// ── Drag-and-drop ──────────────────────
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) setFile(file);
+});
+csvInput.addEventListener('change', () => {
+  if (csvInput.files[0]) setFile(csvInput.files[0]);
+});
+
+function setFile(file) {
+  dropLabel.textContent = file.name;
+  dropZone.classList.add('has-file');
+}
+
+// ── Run ────────────────────────────────
+btnRun.addEventListener('click', runPipeline);
+
+function runPipeline() {
+  const file = csvInput.files[0];
+  if (!file) { showError('Please upload a CSV file first.'); return; }
+
+  const threshold = thresholdInput.value;
+  const formData = new FormData();
+  formData.append('csv', file);
+  formData.append('threshold', threshold);
+
+  btnRun.disabled = true;
+  btnRun.textContent = 'RUNNING...';
+  progressBox.style.display = 'block';
+  errorBox.style.display = 'none';
+  progressList.innerHTML = '';
+  progressFill.style.width = '0%';
+  topbarTag.textContent = 'Running';
+
+  const evtSource = new EventSource('/run?' + new URLSearchParams({threshold}).toString());
+
+  // POST the file via fetch separately — SSE can't carry body.
+  // We use a different approach: POST to /run, get a run_id, then SSE to /run/stream/<id>
+  // Simpler: use fetch with ReadableStream to consume SSE from a POST.
+  evtSource.close(); // close the GET attempt
+
+  fetchSSE('/run', formData);
+}
+
+function fetchSSE(url, formData) {
+  fetch(url, { method: 'POST', body: formData })
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(d => { throw new Error(d.error || 'Server error'); });
+      }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      function pump() {
+        return reader.read().then(({ done, value }) => {
+          if (done) return;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop(); // keep incomplete line
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const evt = JSON.parse(line.slice(6));
+                handleSSEEvent(evt);
+              } catch (e) { /* ignore parse errors */ }
+            }
+          }
+          return pump();
+        });
+      }
+      return pump();
+    })
+    .catch(err => {
+      showError(err.message || 'Pipeline failed. Check that your API key is configured.');
+      btnRun.disabled = false;
+      btnRun.textContent = 'FIND MY LEADS';
+      topbarTag.textContent = 'Error';
+    });
+}
+
+function handleSSEEvent(evt) {
+  if (evt.type === 'progress') {
+    addProgressItem(evt.message, 'active');
+    progressFill.style.width = evt.pct + '%';
+  } else if (evt.type === 'done') {
+    progressFill.style.width = '100%';
+    addProgressItem('Complete', 'done');
+    setTimeout(() => showResults(evt.leads, evt.stats), 400);
+  } else if (evt.type === 'error') {
+    showError(evt.message);
+    btnRun.disabled = false;
+    btnRun.textContent = 'FIND MY LEADS';
+    topbarTag.textContent = 'Error';
+  }
+}
+
+function addProgressItem(message, cls) {
+  // Mark previous active as done
+  const prev = progressList.querySelector('.active');
+  if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+
+  const li = document.createElement('li');
+  li.className = 'progress-item ' + cls;
+  li.innerHTML = `<span class="progress-dot"></span><span>${message}</span>`;
+  progressList.appendChild(li);
+  li.scrollIntoView({ block: 'nearest' });
+}
+
+// ── Show results ───────────────────────
+function showResults(leads, s) {
+  allLeads = leads;
+  stats = s;
+
+  // Stats row
+  document.getElementById('stat-total').textContent     = s.total;
+  document.getElementById('stat-qualified').textContent = s.qualified;
+  document.getElementById('stat-drafted').textContent   = s.drafted;
+  document.getElementById('stat-time').innerHTML        = s.time_saved + '<span class="stat-suffix"> HRS</span>';
+
+  // Table badge
+  document.getElementById('table-badge').textContent = s.drafted + ' READY';
+  document.getElementById('table-meta').textContent  = `Showing ${leads.length} leads`;
+
+  // Build table rows — sort by score desc
+  const sorted = [...leads].sort((a, b) => (b.score || 0) - (a.score || 0));
+  allLeads = sorted; // use sorted order for index references
+  const tbody = document.getElementById('lead-tbody');
+  tbody.innerHTML = '';
+
+  sorted.forEach((lead, i) => {
+    const tr = document.createElement('tr');
+    tr.dataset.idx = i;
+    tr.innerHTML = `
+      <td class="lead-name-cell">${esc(lead.company)} · ${esc(lead.name)}</td>
+      <td>${esc(lead.role)}</td>
+      <td>${scorePill(lead.score, lead.tier)}</td>
+      <td>${esc(lead.industry)}</td>
+      <td>${statusCell(lead)}</td>
+    `;
+    tr.addEventListener('click', () => selectLead(i, tr));
+    tbody.appendChild(tr);
+  });
+
+  // Switch views
+  viewConfigure.style.display = 'none';
+  viewResults.style.display   = 'flex';
+  topbarTag.textContent  = 'Run complete';
+  topbarRight.textContent = new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+
+  btnRun.disabled = false;
+  btnRun.textContent = 'FIND MY LEADS';
+
+  // Auto-select first qualified lead
+  const firstQualified = sorted.findIndex(l => l.qualified && l.draft_subject && l.draft_subject !== 'DRAFT_FAILED');
+  if (firstQualified >= 0) {
+    const firstRow = tbody.rows[firstQualified];
+    selectLead(firstQualified, firstRow);
+  }
+}
+
+// ── Select a lead row ──────────────────
+function selectLead(idx, tr) {
+  // Deselect all
+  document.querySelectorAll('#lead-tbody tr').forEach(r => r.classList.remove('selected'));
+  tr.classList.add('selected');
+  selectedIdx = idx;
+
+  const lead = allLeads[idx];
+  const draftContent = document.getElementById('draft-content');
+  const draftEmpty   = document.getElementById('draft-empty');
+
+  if (!lead.qualified || !lead.draft_subject || lead.draft_subject === 'DRAFT_FAILED') {
+    draftEmpty.style.display = 'flex';
+    draftContent.style.display = 'none';
+    return;
+  }
+
+  draftEmpty.style.display = 'none';
+  draftContent.style.display = 'flex';
+
+  document.getElementById('d-name').textContent    = (lead.name + ' · ' + lead.company).toUpperCase();
+  document.getElementById('d-sub').textContent     = `${lead.role} · ${lead.industry} · ICP Score ${lead.score}/100`;
+  document.getElementById('d-to').textContent      = lead.email || '—';
+  document.getElementById('d-subject').textContent = lead.draft_subject || '—';
+  document.getElementById('d-body').textContent    = lead.draft_body || '—';
+}
+
+// ── Copy email ─────────────────────────
+document.getElementById('btn-copy').addEventListener('click', () => {
+  if (selectedIdx === null) return;
+  const lead = allLeads[selectedIdx];
+  const text = `Subject: ${lead.draft_subject}\n\n${lead.draft_body}`;
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('Email copied to clipboard.'))
+    .catch(() => showToast('Copy failed — try selecting and copying manually.'));
+});
+
+// ── Export to Sheets ───────────────────
+document.getElementById('btn-export').addEventListener('click', () => {
+  if (!allLeads.length) return;
+  showToast('Exporting to Google Sheets...');
+  fetch('/export', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ leads: allLeads }),
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.ok) showToast(d.message || 'Exported successfully.');
+    else showToast('Export failed: ' + (d.error || 'unknown error'));
+  })
+  .catch(() => showToast('Export failed — check server logs.'));
+});
+
+// ── Run again ──────────────────────────
+document.getElementById('btn-again').addEventListener('click', resetToConfig);
+
+function resetToConfig() {
+  viewResults.style.display   = 'none';
+  viewConfigure.style.display = 'flex';
+  progressBox.style.display   = 'none';
+  progressList.innerHTML      = '';
+  progressFill.style.width    = '0%';
+  errorBox.style.display      = 'none';
+  topbarTag.textContent       = 'Ready';
+  topbarRight.textContent     = '';
+  allLeads = [];
+  selectedIdx = null;
+  csvInput.value = '';
+  dropLabel.textContent = 'Drop your CSV here or click to browse';
+  dropZone.classList.remove('has-file');
+}
+
+// ── Helpers ────────────────────────────
+function scorePill(score, tier) {
+  const cls = tier === 'HIGH' ? 'pill-high' : tier === 'MED' ? 'pill-med' : 'pill-low';
+  return `<span class="score-pill ${cls}">${score}</span>`;
+}
+
+function statusCell(lead) {
+  if (!lead.qualified) {
+    return `<span class="status-dot dot-none"></span><span style="color:var(--text-4)">Below threshold</span>`;
+  }
+  if (!lead.draft_subject || lead.draft_subject === 'DRAFT_FAILED') {
+    return `<span class="status-dot dot-pending"></span><span style="color:var(--text-3)">Draft failed</span>`;
+  }
+  return `<span class="status-dot dot-ready"></span>Draft ready`;
+}
+
+function showError(msg) {
+  errorBox.textContent = msg;
+  errorBox.style.display = 'block';
+}
+
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+let toastTimer;
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
