@@ -186,8 +186,14 @@
     font-weight: 300;
     color: var(--text-3);
   }
-  .drop-zone.has-file .drop-label { color: var(--accent); }
+  .drop-zone.has-file {
+    border-color: var(--accent);
+    border-style: solid;
+    background: var(--accent-bg);
+  }
+  .drop-zone.has-file .drop-label { color: var(--accent); font-weight: 500; }
   .drop-zone.has-file .drop-icon { color: var(--accent); }
+  .drop-zone.has-file .drop-sub { color: var(--text-3); }
 
   .sample-link {
     font-size: 10px;
@@ -861,6 +867,8 @@ csvInput.addEventListener('change', () => {
 
 function setFile(file) {
   dropLabel.textContent = file.name;
+  dropZone.querySelector('.drop-icon').textContent = '✓';
+  dropZone.querySelector('.drop-sub').textContent = `${(file.size / 1024).toFixed(1)} KB — ready to run`;
   dropZone.classList.add('has-file');
 }
 
@@ -1081,6 +1089,8 @@ function resetToConfig() {
   selectedIdx = null;
   csvInput.value = '';
   dropLabel.textContent = 'Drop your CSV here or click to browse';
+  dropZone.querySelector('.drop-icon').textContent = '↑';
+  dropZone.querySelector('.drop-sub').textContent = 'Required columns: name, company, role, industry, email, company_size, notes';
   dropZone.classList.remove('has-file');
 }
 
