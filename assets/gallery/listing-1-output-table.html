@@ -4,201 +4,248 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1200">
 <title>Lead Research Agent — Qualified Leads</title>
+<link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:            oklch(98.5% 0.004 95);
+    --surface:       oklch(99.6% 0.002 95);
+    --surface-sunk:  oklch(96.5% 0.005 95);
+    --fg:            oklch(24% 0.015 215);
+    --muted:         oklch(52% 0.014 215);
+    --faint:         oklch(66% 0.012 215);
+    --border:        oklch(90% 0.006 215);
+    --border-strong: oklch(82% 0.008 215);
+    --accent:        oklch(50% 0.090 196);
+    --accent-hover:  oklch(44% 0.092 196);
+    --accent-soft:   oklch(95% 0.020 196);
+    --accent-line:   oklch(80% 0.045 196);
+    --font-sans:     'Satoshi', -apple-system, sans-serif;
+    --font-mono:     'JetBrains Mono', ui-monospace, monospace;
+  }
+
   body {
     width: 1200px;
     height: 1200px;
-    background: #0A0A0A;
-    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
     overflow: hidden;
     position: relative;
   }
-  .ember-bar { position: absolute; left: 0; top: 0; width: 8px; height: 100%; background: #C8391A; }
 
+  /* Topbar */
   .topbar {
     position: absolute;
-    top: 0; left: 8px; right: 0;
+    top: 0; left: 0; right: 0;
     height: 60px;
-    background: #111111;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     padding: 0 48px;
-    gap: 24px;
+    gap: 14px;
   }
-  .topbar-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: #F5F2ED;
-    letter-spacing: 0.08em;
+  .brand-stack { display: flex; flex-direction: column; gap: 1px; }
+  .brand-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--fg);
+    line-height: 1.15;
   }
-  .topbar-tag {
-    font-size: 10px;
+  .brand-sub {
+    font-family: var(--font-mono);
+    font-size: 8px;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #6B6660;
+    color: var(--faint);
+    line-height: 1.1;
+  }
+  .topbar-sep { width: 1px; height: 18px; background: var(--border-strong); }
+  .topbar-tool { font-size: 13px; font-weight: 500; color: var(--muted); }
+  .topbar-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--faint);
   }
   .topbar-date {
     margin-left: auto;
+    font-family: var(--font-mono);
     font-size: 11px;
-    font-weight: 300;
-    color: #6B6660;
+    color: var(--faint);
   }
 
-  .stats-row {
+  /* Stats — divided strip */
+  .stats-strip {
     position: absolute;
-    top: 76px; left: 48px; right: 48px;
-    display: flex;
-    gap: 16px;
+    top: 84px; left: 48px; right: 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
   }
-  .stat-card {
-    flex: 1;
-    background: #111111;
-    border: 1px solid rgba(255,255,255,0.07);
+  .stat-cell {
     padding: 22px 28px;
+    border-right: 1px solid var(--border);
   }
+  .stat-cell:last-child { border-right: none; }
   .stat-label {
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #6B6660;
-    margin-bottom: 10px;
+    color: var(--faint);
+    margin-bottom: 12px;
   }
   .stat-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 52px;
-    color: #F5F2ED;
+    font-family: var(--font-mono);
+    font-size: 44px;
+    font-weight: 500;
+    color: var(--fg);
     line-height: 1;
+    letter-spacing: -0.02em;
   }
-  .stat-value.accent { color: #C8391A; }
-  .stat-sub {
-    font-size: 11px;
-    font-weight: 300;
-    color: #6B6660;
-    margin-top: 6px;
-  }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value .suffix { font-size: 20px; color: var(--faint); }
+  .stat-sub { font-size: 11px; font-weight: 400; color: var(--faint); margin-top: 8px; }
 
+  /* Table */
   .table-wrap {
     position: absolute;
-    top: 220px; left: 48px; right: 48px; bottom: 48px;
-    background: #111111;
-    border: 1px solid rgba(255,255,255,0.07);
+    top: 230px; left: 48px; right: 48px; bottom: 48px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
   .table-header {
     padding: 18px 28px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     gap: 12px;
     flex-shrink: 0;
   }
   .table-title {
-    font-weight: 500;
+    font-weight: 700;
     font-size: 12px;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
-    color: #F5F2ED;
+    color: var(--fg);
   }
   .badge {
-    background: rgba(200,57,26,0.15);
-    border: 1px solid rgba(200,57,26,0.3);
-    color: #C8391A;
+    font-family: var(--font-mono);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent-hover);
     font-size: 10px;
     font-weight: 500;
-    padding: 3px 10px;
-    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
   }
   .showing {
     margin-left: auto;
+    font-family: var(--font-mono);
     font-size: 10px;
-    font-weight: 300;
-    color: #3E3B38;
-    letter-spacing: 0.08em;
+    font-weight: 400;
+    color: var(--faint);
   }
-
   .table-grid {
     display: grid;
     grid-template-columns: 2.2fr 1.4fr 0.9fr 1fr 1fr;
     flex: 1;
-    overflow: hidden;
   }
   .col-head {
+    font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
-    color: #6B6660;
-    padding: 12px 28px;
-    background: rgba(255,255,255,0.02);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--faint);
+    padding: 13px 28px;
+    background: var(--surface-sunk);
+    border-bottom: 1px solid var(--border);
   }
   .table-row { display: contents; }
   .table-row > div {
     padding: 13px 28px;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
     font-size: 13px;
-    font-weight: 300;
-    color: #C4C0B8;
+    font-weight: 400;
+    color: var(--muted);
     display: flex;
     align-items: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .table-row.alt > div { background: rgba(255,255,255,0.015); }
-  .lead-name { color: #F5F2ED; font-weight: 400; }
+  .lead-name { color: var(--fg); font-weight: 500; }
   .score-pill {
     display: inline-block;
-    padding: 3px 12px;
+    font-family: var(--font-mono);
+    padding: 3px 11px;
+    border-radius: 3px;
     font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.08em;
   }
-  .score-high { background: rgba(200,57,26,0.15); color: #C8391A; border: 1px solid rgba(200,57,26,0.3); }
-  .score-med  { background: rgba(196,192,184,0.08); color: #C4C0B8; border: 1px solid rgba(196,192,184,0.18); }
-  .score-low  { background: rgba(107,102,96,0.08); color: #6B6660; border: 1px solid rgba(107,102,96,0.18); }
+  .score-high { background: var(--accent-soft); color: var(--accent-hover); border: 1px solid var(--accent-line); }
+  .score-med  { background: var(--surface-sunk); color: var(--muted); border: 1px solid var(--border-strong); }
+  .score-low  { background: transparent; color: var(--faint); border: 1px solid var(--border); }
   .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 8px; flex-shrink: 0; }
-  .dot-ready  { background: #C8391A; }
-  .dot-none   { background: transparent; border: 1px solid #3E3B38; }
+  .dot-ready  { background: var(--accent); }
+  .dot-none   { background: transparent; border: 1px solid var(--border-strong); }
 </style>
 </head>
 <body>
 
-<div class="ember-bar"></div>
-
 <div class="topbar">
-  <div class="topbar-title">LEAD RESEARCH AGENT</div>
-  <div class="topbar-tag">Sample Output Report</div>
-  <div class="topbar-date">Processed — Apr 03, 2026 · 08:14 GMT</div>
+  <svg width="20" height="20" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8.6" fill="none" stroke="oklch(50% 0.090 196)" stroke-width="2.6"
+            stroke-linecap="round" stroke-dasharray="47 8" transform="rotate(-58 12 12)"/>
+  </svg>
+  <div class="brand-stack">
+    <span class="brand-name">Ato Sam</span>
+    <span class="brand-sub">Autonomy Intelligence</span>
+  </div>
+  <span class="topbar-sep"></span>
+  <span class="topbar-tool">Lead Research Agent</span>
+  <span class="topbar-tag">Sample Output Report</span>
+  <span class="topbar-date">Processed — Apr 03, 2026 · 08:14 GMT</span>
 </div>
 
-<div class="stats-row">
-  <div class="stat-card">
+<div class="stats-strip">
+  <div class="stat-cell">
     <div class="stat-label">Prospects Scored</div>
     <div class="stat-value">84</div>
     <div class="stat-sub">from your list</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-cell">
     <div class="stat-label">Qualified</div>
     <div class="stat-value accent">19</div>
     <div class="stat-sub">matched ICP criteria</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-cell">
     <div class="stat-label">Outreach Drafted</div>
     <div class="stat-value">19</div>
     <div class="stat-sub">personalised emails</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-cell">
     <div class="stat-label">Time Saved</div>
-    <div class="stat-value">4.2<span style="font-size:26px;color:#6B6660"> HRS</span></div>
+    <div class="stat-value">4.2<span class="suffix"> hrs</span></div>
     <div class="stat-sub">vs. manual review</div>
   </div>
 </div>
@@ -216,7 +263,7 @@
     <div class="col-head">Industry</div>
     <div class="col-head">Status</div>
 
-    <div class="table-row alt">
+    <div class="table-row">
       <div><span class="lead-name">Apex Consulting · Ryan Mitchell</span></div>
       <div>Founder &amp; CEO</div>
       <div><span class="score-pill score-high">94</span></div>
@@ -230,7 +277,7 @@
       <div>Digital Agency</div>
       <div><span class="status-dot dot-ready"></span>Draft ready</div>
     </div>
-    <div class="table-row alt">
+    <div class="table-row">
       <div><span class="lead-name">Ironside Logistics · Derek Walsh</span></div>
       <div>Managing Director</div>
       <div><span class="score-pill score-high">85</span></div>
@@ -244,7 +291,7 @@
       <div>HR Tech</div>
       <div><span class="status-dot dot-ready"></span>Draft ready</div>
     </div>
-    <div class="table-row alt">
+    <div class="table-row">
       <div><span class="lead-name">FieldOps Pro · Marcus Greene</span></div>
       <div>Founder</div>
       <div><span class="score-pill score-med">76</span></div>
@@ -258,7 +305,7 @@
       <div>Consulting</div>
       <div><span class="status-dot dot-ready"></span>Draft ready</div>
     </div>
-    <div class="table-row alt">
+    <div class="table-row">
       <div><span class="lead-name">Pura Growth · Tom Aldridge</span></div>
       <div>Director of Ops</div>
       <div><span class="score-pill score-med">71</span></div>
@@ -272,7 +319,7 @@
       <div>B2B Services</div>
       <div><span class="status-dot dot-ready"></span>Draft ready</div>
     </div>
-    <div class="table-row alt">
+    <div class="table-row">
       <div><span class="lead-name">Vantage Studio · Nina Osei</span></div>
       <div>Founder</div>
       <div><span class="score-pill score-med">65</span></div>
@@ -286,7 +333,7 @@
       <div>Consulting</div>
       <div><span class="status-dot dot-ready"></span>Draft ready</div>
     </div>
-    <div class="table-row alt">
+    <div class="table-row">
       <div><span class="lead-name">Crestline Ops · Diana Kwon</span></div>
       <div>COO</div>
       <div><span class="score-pill score-med">61</span></div>

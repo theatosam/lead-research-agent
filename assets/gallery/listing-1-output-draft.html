@@ -4,123 +4,147 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1200">
 <title>Lead Research Agent — Draft Outreach</title>
+<link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:            oklch(98.5% 0.004 95);
+    --surface:       oklch(99.6% 0.002 95);
+    --surface-sunk:  oklch(96.5% 0.005 95);
+    --fg:            oklch(24% 0.015 215);
+    --muted:         oklch(52% 0.014 215);
+    --faint:         oklch(66% 0.012 215);
+    --border:        oklch(90% 0.006 215);
+    --border-strong: oklch(82% 0.008 215);
+    --accent:        oklch(50% 0.090 196);
+    --accent-hover:  oklch(44% 0.092 196);
+    --accent-soft:   oklch(95% 0.020 196);
+    --accent-line:   oklch(80% 0.045 196);
+    --on-accent:     oklch(99% 0.004 95);
+    --font-sans:     'Satoshi', -apple-system, sans-serif;
+    --font-mono:     'JetBrains Mono', ui-monospace, monospace;
+  }
+
   body {
     width: 1200px;
     height: 1200px;
-    background: #0A0A0A;
-    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
     overflow: hidden;
     position: relative;
   }
-  .ember-bar { position: absolute; left: 0; top: 0; width: 8px; height: 100%; background: #C8391A; }
 
   .topbar {
     position: absolute;
-    top: 0; left: 8px; right: 0;
+    top: 0; left: 0; right: 0;
     height: 60px;
-    background: #111111;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     padding: 0 48px;
-    gap: 24px;
+    gap: 14px;
   }
-  .topbar-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: #F5F2ED;
-    letter-spacing: 0.08em;
+  .brand-stack { display: flex; flex-direction: column; gap: 1px; }
+  .brand-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--fg);
+    line-height: 1.15;
   }
-  .topbar-tag {
-    font-size: 10px;
+  .brand-sub {
+    font-family: var(--font-mono);
+    font-size: 8px;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #6B6660;
+    color: var(--faint);
+    line-height: 1.1;
   }
+  .topbar-sep { width: 1px; height: 18px; background: var(--border-strong); }
+  .topbar-tool { font-size: 13px; font-weight: 500; color: var(--muted); }
   .badge {
-    background: rgba(200,57,26,0.12);
-    border: 1px solid rgba(200,57,26,0.25);
-    color: #C8391A;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent-hover);
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
-    padding: 3px 10px;
-    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
   }
   .score-badge {
     margin-left: auto;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: #C8391A;
-    letter-spacing: 0.08em;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.02em;
   }
 
   .draft-wrap {
     position: absolute;
-    top: 76px; left: 48px; right: 48px; bottom: 48px;
-    background: #111111;
-    border: 1px solid rgba(255,255,255,0.07);
+    top: 84px; left: 48px; right: 48px; bottom: 48px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
   .lead-block {
-    padding: 32px 48px 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    background: #0F0F0F;
+    padding: 32px 48px 26px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-sunk);
   }
   .lead-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    color: #F5F2ED;
-    letter-spacing: 0.04em;
-    line-height: 1;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
     margin-bottom: 8px;
   }
   .lead-meta {
-    font-size: 13px;
-    font-weight: 300;
-    color: #6B6660;
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--faint);
   }
-  .lead-meta span {
-    color: #C8391A;
-    font-weight: 500;
-  }
+  .lead-meta span { color: var(--accent-hover); font-weight: 500; }
 
   .field-row {
     padding: 18px 48px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: flex-start;
     gap: 24px;
   }
   .field-label {
-    font-size: 11px;
+    font-family: var(--font-mono);
+    font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #6B6660;
+    color: var(--faint);
     width: 80px;
     flex-shrink: 0;
-    padding-top: 2px;
+    padding-top: 3px;
   }
   .field-value {
     font-size: 15px;
-    font-weight: 300;
-    color: #C4C0B8;
+    font-weight: 400;
+    color: var(--muted);
     line-height: 1.5;
-  }
-
-  .divider {
-    height: 1px;
-    background: rgba(255,255,255,0.05);
-    margin: 0 48px;
   }
 
   .body-block {
@@ -130,56 +154,64 @@
   }
   .body-text {
     font-size: 17px;
-    font-weight: 300;
-    color: #C4C0B8;
-    line-height: 2.0;
+    font-weight: 400;
+    color: var(--fg);
+    line-height: 1.9;
   }
-  .body-text .hl { color: #F5F2ED; font-weight: 400; }
-  .body-text .red { color: #C8391A; font-weight: 400; }
+  .body-text .hl  { color: var(--fg); font-weight: 600; }
+  .body-text .red { color: var(--accent-hover); font-weight: 600; }
 
   .actions {
-    padding: 24px 48px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 22px 48px;
+    border-top: 1px solid var(--border);
     display: flex;
     gap: 12px;
-    background: #0F0F0F;
+    background: var(--surface-sunk);
+    align-items: center;
   }
   .btn-primary {
-    background: #C8391A;
-    color: #F5F2ED;
+    background: var(--accent);
+    color: var(--on-accent);
     font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
+    font-weight: 700;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
-    padding: 14px 28px;
+    padding: 13px 26px;
+    border-radius: 4px;
   }
   .btn-secondary {
-    background: transparent;
-    color: #C4C0B8;
+    background: var(--surface);
+    color: var(--fg);
     font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
+    font-weight: 700;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
-    padding: 14px 28px;
-    border: 1px solid rgba(255,255,255,0.12);
+    padding: 13px 26px;
+    border-radius: 4px;
+    border: 1px solid var(--border-strong);
   }
   .note {
     margin-left: auto;
+    font-family: var(--font-mono);
     font-size: 11px;
-    font-weight: 300;
-    color: #3E3B38;
-    align-self: center;
-    letter-spacing: 0.04em;
+    font-weight: 400;
+    color: var(--faint);
   }
 </style>
 </head>
 <body>
 
-<div class="ember-bar"></div>
-
 <div class="topbar">
-  <div class="topbar-title">DRAFT OUTREACH</div>
-  <div class="topbar-tag">AI Lead Research Agent</div>
+  <svg width="20" height="20" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8.6" fill="none" stroke="oklch(50% 0.090 196)" stroke-width="2.6"
+            stroke-linecap="round" stroke-dasharray="47 8" transform="rotate(-58 12 12)"/>
+  </svg>
+  <div class="brand-stack">
+    <span class="brand-name">Ato Sam</span>
+    <span class="brand-sub">Autonomy Intelligence</span>
+  </div>
+  <span class="topbar-sep"></span>
+  <span class="topbar-tool">Draft Outreach</span>
   <div class="badge">PERSONALISED</div>
   <div class="score-badge">ICP SCORE 94 / 100</div>
 </div>
@@ -187,7 +219,7 @@
 <div class="draft-wrap">
 
   <div class="lead-block">
-    <div class="lead-name">RYAN MITCHELL — APEX CONSULTING</div>
+    <div class="lead-name">Ryan Mitchell — Apex Consulting</div>
     <div class="lead-meta">Founder &amp; CEO &nbsp;·&nbsp; B2B Services &nbsp;·&nbsp; <span>Qualified lead #1 of 19</span></div>
   </div>
 
@@ -200,8 +232,6 @@
     <div class="field-value">Quick question about your client intake process</div>
   </div>
 
-  <div class="divider"></div>
-
   <div class="body-block">
     <div class="body-text">
       Hi Ryan,<br><br>
@@ -209,7 +239,7 @@
       Most consulting firms at your stage hit the same wall: the intake and onboarding process becomes a bottleneck. Founders end up spending <span class="red">30–40% of their time</span> on admin that should run automatically.<br><br>
       I build AI agent systems that handle that entire process — lead qualification, onboarding sequences, document collection — <span class="hl">without you managing any of it.</span><br><br>
       Would it be useful to see a quick sketch of how this would work for Apex specifically?<br><br>
-      Ato
+      Ato Sam
     </div>
   </div>
 

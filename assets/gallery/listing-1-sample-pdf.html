@@ -3,124 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <title>Lead Research Agent — Sample Deliverable</title>
+<link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    background: #F5F2ED;
-    font-family: 'DM Mono', monospace;
-    color: #0A0A0A;
+  :root {
+    --bg:            oklch(98.5% 0.004 95);
+    --surface:       oklch(99.6% 0.002 95);
+    --surface-sunk:  oklch(96.5% 0.005 95);
+    --fg:            oklch(24% 0.015 215);
+    --muted:         oklch(52% 0.014 215);
+    --faint:         oklch(66% 0.012 215);
+    --border:        oklch(90% 0.006 215);
+    --border-strong: oklch(82% 0.008 215);
+    --accent:        oklch(50% 0.090 196);
+    --accent-hover:  oklch(44% 0.092 196);
+    --accent-soft:   oklch(95% 0.020 196);
+    --accent-line:   oklch(80% 0.045 196);
+    --font-sans:     'Satoshi', -apple-system, sans-serif;
+    --font-mono:     'JetBrains Mono', ui-monospace, monospace;
   }
 
-  /* Print: 3 pages max, letter size */
-  @page {
-    size: letter;
-    margin: 0;
+  body {
+    background: var(--bg);
+    font-family: var(--font-sans);
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
   }
+
+  @page { size: letter; margin: 0; }
 
   .page {
     width: 816px;
     min-height: 1056px;
     margin: 0 auto 32px;
-    background: #F5F2ED;
-    padding: 56px 64px;
+    background: var(--bg);
+    padding: 64px;
     position: relative;
     page-break-after: always;
   }
-
   .page:last-child { page-break-after: auto; }
 
   /* Page 1 — Cover / Summary */
-  .cover-bar {
-    width: 4px;
-    height: 100%;
-    background: #C8391A;
-    position: absolute;
-    left: 0; top: 0;
-  }
-
   .doc-label {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #C8391A;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .doc-title {
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1;
+    letter-spacing: -0.025em;
     margin-bottom: 10px;
   }
-
-  .doc-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    color: #0A0A0A;
-    line-height: 1;
-    letter-spacing: 0.03em;
-    margin-bottom: 6px;
-  }
-
   .doc-sub {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 16px;
-    color: #6B6660;
-    margin-bottom: 32px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.55;
+    max-width: 60ch;
+    margin-bottom: 36px;
   }
-
-  .divider { height: 1px; background: rgba(10,10,10,0.1); margin: 24px 0; }
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
 
   /* Summary stats */
   .stat-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 36px;
   }
-
   .stat-box {
-    flex: 1;
-    background: #0A0A0A;
-    padding: 20px 20px;
+    padding: 20px 22px;
+    border-right: 1px solid var(--border);
   }
-
+  .stat-box:last-child { border-right: none; }
   .stat-box-label {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #6B6660;
-    margin-bottom: 8px;
+    color: var(--faint);
+    margin-bottom: 10px;
   }
-
   .stat-box-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
-    color: #F5F2ED;
+    font-family: var(--font-mono);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--fg);
     line-height: 1;
+    letter-spacing: -0.02em;
   }
-
-  .stat-box-value.red { color: #C8391A; }
-
-  .stat-box-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 300;
-    color: #6B6660;
-    margin-top: 4px;
-  }
+  .stat-box-value.red { color: var(--accent); }
+  .stat-box-value .suffix { font-size: 15px; color: var(--faint); }
+  .stat-box-sub { font-size: 10px; font-weight: 400; color: var(--faint); margin-top: 6px; }
 
   /* Section header */
   .section-head {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #C8391A;
+    color: var(--accent);
     margin-bottom: 14px;
-    border-bottom: 1px solid rgba(10,10,10,0.08);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 8px;
   }
 
@@ -130,133 +130,136 @@
     border-collapse: collapse;
     margin-bottom: 28px;
   }
-
   th {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
-    color: #6B6660;
+    color: var(--faint);
     text-align: left;
-    padding: 10px 12px;
-    background: rgba(10,10,10,0.04);
-    border-bottom: 1px solid rgba(10,10,10,0.1);
-  }
-
-  td {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 300;
-    color: #0A0A0A;
     padding: 11px 12px;
-    border-bottom: 1px solid rgba(10,10,10,0.06);
+    background: var(--surface-sunk);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
     vertical-align: top;
   }
-
-  td.name { font-weight: 400; }
+  td.name { font-weight: 600; color: var(--fg); }
 
   .score-chip {
     display: inline-block;
-    padding: 2px 8px;
+    font-family: var(--font-mono);
+    padding: 2px 9px;
+    border-radius: 3px;
     font-size: 10px;
     font-weight: 500;
   }
+  .score-high { background: var(--accent-soft); color: var(--accent-hover); border: 1px solid var(--accent-line); }
+  .score-med  { background: var(--surface-sunk); color: var(--muted); border: 1px solid var(--border-strong); }
 
-  .score-high { background: rgba(200,57,26,0.1); color: #C8391A; border: 1px solid rgba(200,57,26,0.25); }
-  .score-med { background: rgba(10,10,10,0.06); color: #6B6660; border: 1px solid rgba(10,10,10,0.12); }
-
-  /* Draft email */
+  /* Draft email block */
   .draft-block {
-    background: #0A0A0A;
-    padding: 24px 28px;
+    background: var(--surface-sunk);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 26px 30px;
     margin-bottom: 24px;
   }
-
   .draft-block-head {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #C8391A;
-    margin-bottom: 14px;
+    color: var(--accent);
+    margin-bottom: 16px;
   }
-
   .draft-meta-line {
     display: flex;
     gap: 12px;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
     align-items: flex-start;
   }
-
   .draft-meta-key {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #6B6660;
+    color: var(--faint);
     width: 60px;
     flex-shrink: 0;
   }
-
   .draft-meta-val {
-    font-family: 'DM Mono', monospace;
     font-size: 11px;
-    font-weight: 300;
-    color: #C4C0B8;
+    font-weight: 400;
+    color: var(--muted);
   }
-
-  .draft-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 14px 0; }
-
+  .draft-divider { height: 1px; background: var(--border); margin: 16px 0; }
   .draft-body {
-    font-family: 'DM Mono', monospace;
     font-size: 12px;
-    font-weight: 300;
-    color: #C4C0B8;
-    line-height: 1.85;
+    font-weight: 400;
+    color: var(--fg);
+    line-height: 1.8;
   }
 
   /* Page footer */
   .page-footer {
     position: absolute;
-    bottom: 32px;
+    bottom: 36px;
     left: 64px; right: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-
   .footer-brand {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 14px;
-    color: #0A0A0A;
-    letter-spacing: 0.1em;
-    opacity: 0.3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-
+  .footer-brand-stack { display: flex; flex-direction: column; gap: 1px; }
+  .footer-brand-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+  }
+  .footer-brand-sub {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--faint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
   .footer-page {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
-    font-weight: 300;
-    color: #6B6660;
+    font-weight: 400;
+    color: var(--faint);
   }
 
   /* Note box */
   .note-box {
-    background: rgba(200,57,26,0.06);
-    border-left: 3px solid #C8391A;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 6px;
     padding: 16px 20px;
     margin-bottom: 24px;
   }
-
   .note-text {
-    font-family: 'DM Mono', monospace;
     font-size: 12px;
-    font-weight: 300;
-    color: #0A0A0A;
-    line-height: 1.7;
+    font-weight: 400;
+    color: var(--accent-hover);
+    line-height: 1.65;
   }
 </style>
 </head>
@@ -264,15 +267,14 @@
 
 <!-- PAGE 1: Summary + Lead Table -->
 <div class="page">
-  <div class="cover-bar"></div>
 
   <div class="doc-label">Sample Deliverable — AI Lead Research Agent</div>
-  <div class="doc-title">LEAD RESEARCH REPORT</div>
+  <div class="doc-title">Lead research report</div>
   <div class="doc-sub">Sample output showing how the AI qualification system processes your prospect list, scores each contact, and delivers personalised outreach ready to send.</div>
 
   <div class="stat-row">
     <div class="stat-box">
-      <div class="stat-box-label">Prospects Reviewed Today</div>
+      <div class="stat-box-label">Prospects Reviewed</div>
       <div class="stat-box-value">3</div>
       <div class="stat-box-sub">from your list</div>
     </div>
@@ -288,7 +290,7 @@
     </div>
     <div class="stat-box">
       <div class="stat-box-label">Est. Time Saved</div>
-      <div class="stat-box-value">4.2<span style="font-size:18px;color:#6B6660"> HRS</span></div>
+      <div class="stat-box-value">4.2<span class="suffix"> hrs</span></div>
       <div class="stat-box-sub">vs. manual research</div>
     </div>
   </div>
@@ -310,7 +312,7 @@
       <tr>
         <td class="name">Apex Consulting</td>
         <td>Ryan Mitchell</td>
-        <td>Founder & CEO</td>
+        <td>Founder &amp; CEO</td>
         <td>B2B Services</td>
         <td><span class="score-chip score-high">94</span></td>
         <td>Founder-led. Consistent with target criteria.</td>
@@ -335,14 +337,22 @@
   </table>
 
   <div class="page-footer">
-    <div class="footer-brand">ATO SAM</div>
+    <div class="footer-brand">
+      <svg width="16" height="16" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.6" fill="none" stroke="oklch(50% 0.090 196)" stroke-width="2.6"
+                stroke-linecap="round" stroke-dasharray="47 8" transform="rotate(-58 12 12)"/>
+      </svg>
+      <div class="footer-brand-stack">
+        <span class="footer-brand-name">Ato Sam</span>
+        <span class="footer-brand-sub">Autonomy Intelligence</span>
+      </div>
+    </div>
     <div class="footer-page">Page 1 of 3 · Confidential sample — not real data</div>
   </div>
 </div>
 
 <!-- PAGE 2: Draft Outreach Sample #1 -->
 <div class="page">
-  <div class="cover-bar"></div>
 
   <div class="section-head">Sample Draft Outreach — Apex Consulting (Score 94)</div>
 
@@ -363,7 +373,7 @@
       Most consulting firms at your stage hit the same wall: the intake and onboarding process becomes a bottleneck. Founders end up spending 30-40% of their time on admin that should run on its own.<br><br>
       I build AI agent systems that handle that entire process — lead qualification, onboarding sequences, document collection — without you managing any of it.<br><br>
       Would it be useful to see a quick sketch of how this would work for Apex specifically?<br><br>
-      Ato
+      Ato Sam
     </div>
   </div>
 
@@ -374,14 +384,22 @@
   </div>
 
   <div class="page-footer">
-    <div class="footer-brand">ATO SAM</div>
+    <div class="footer-brand">
+      <svg width="16" height="16" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.6" fill="none" stroke="oklch(50% 0.090 196)" stroke-width="2.6"
+                stroke-linecap="round" stroke-dasharray="47 8" transform="rotate(-58 12 12)"/>
+      </svg>
+      <div class="footer-brand-stack">
+        <span class="footer-brand-name">Ato Sam</span>
+        <span class="footer-brand-sub">Autonomy Intelligence</span>
+      </div>
+    </div>
     <div class="footer-page">Page 2 of 3 · Confidential sample — not real data</div>
   </div>
 </div>
 
 <!-- PAGE 3: Draft #2 + ICP Spec + Deliverables -->
 <div class="page">
-  <div class="cover-bar"></div>
 
   <div class="section-head">Sample Draft Outreach — Clearpath Digital (Score 88)</div>
 
@@ -401,7 +419,7 @@
       Clearpath fits the criteria well — 12-person digital agency at the stage where reporting and client comms start eating into delivery time.<br><br>
       The agencies I work with typically spend 5-8 hours a week on reporting and comms that an agent can handle automatically — built around how Clearpath specifically runs engagements, not a generic template.<br><br>
       Happy to show you what that looks like for a team your size. No commitment needed.<br><br>
-      Ato
+      Ato Sam
     </div>
   </div>
 
@@ -479,7 +497,16 @@
   </table>
 
   <div class="page-footer">
-    <div class="footer-brand">ATO SAM</div>
+    <div class="footer-brand">
+      <svg width="16" height="16" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.6" fill="none" stroke="oklch(50% 0.090 196)" stroke-width="2.6"
+                stroke-linecap="round" stroke-dasharray="47 8" transform="rotate(-58 12 12)"/>
+      </svg>
+      <div class="footer-brand-stack">
+        <span class="footer-brand-name">Ato Sam</span>
+        <span class="footer-brand-sub">Autonomy Intelligence</span>
+      </div>
+    </div>
     <div class="footer-page">Page 3 of 3 · Confidential sample — not real data</div>
   </div>
 </div>
